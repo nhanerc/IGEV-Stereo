@@ -19,6 +19,7 @@ def grid_sample(img: torch.Tensor, grid: torch.Tensor) -> torch.Tensor:
 
 def bilinear_sampler(img: torch.Tensor, grid: torch.Tensor) -> torch.Tensor:
     """Grid sample for 4D tensors with bilinear interpolation, zero padding and alignment corners.
+    Ref: https://github.com/pytorch/pytorch/blob/main/aten/src/ATen/native/GridSampler.cpp
 
     Args:
         img (torch.Tensor): Input image with shape (N, C, Hi, Wi).
@@ -114,7 +115,7 @@ class CGEV:
             self.corr_pyramid.append(
                 F.avg_pool2d(self.corr_pyramid[i], [1, 2], stride=[1, 2])
             )
-        # This ensures that the last second dimension (heigh) for each volume and corr pyramid is 1
+        # This ensures that the last second dimension (height) for each volume and corr pyramid is 1
 
     def __call__(self, disp: torch.Tensor, coords: torch.Tensor) -> torch.Tensor:
         """CGEV forward
