@@ -119,7 +119,10 @@ class IGEVStereo(nn.Module):
 
     def forward(self, images: torch.Tensor) -> Union[torch.Tensor, List[torch.Tensor]]:
         """Estimate disparity between pair of frames"""
-        B = images.shape[0] // 2
+        # image: [B, 6, H, W]
+        assert images.shape[1] == 6
+        B = images.shape[0]
+        images = torch.cat(images.split(3, dim=1), dim=0)
         with autocast(enabled=self.mixed_precision):
             features = self.feature(images)
             stem_2 = self.stem_2(images)
