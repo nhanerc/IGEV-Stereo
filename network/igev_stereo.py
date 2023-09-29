@@ -123,6 +123,7 @@ class IGEVStereo(nn.Module):
         assert images.shape[1] == 6
         B = images.shape[0]
         images = torch.cat(images.split(3, dim=1), dim=0)
+        images = 2.0 * images / 255.0 - 1.0
         with autocast(enabled=self.mixed_precision):
             features = self.feature(images)
             stem_2 = self.stem_2(images)
